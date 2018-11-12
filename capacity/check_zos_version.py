@@ -2,10 +2,7 @@ from jumpscale import j
 from subprocess import Popen, PIPE
 import click
 
-
 logger = j.logger.get('check_node_commit')
-
-
 
 @click.command()
 @click.option("-f", "--farm_name", help="farm name to update its zrobot", required=True)
