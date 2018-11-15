@@ -1,6 +1,7 @@
 from jumpscale import j
 from subprocess import Popen, PIPE
 import click
+from gevent.pool import Pool
 
 logger = j.logger.get('check_node_commit')
 
@@ -12,7 +13,8 @@ def main(farm_name, commit_id):
     resp = capacity.api.ListCapacity(query_params={'farmer': farm_name})[1]
     nodes = resp.json() #nodes
     logger.info(" #Nodes : {}".format(len(nodes)))
-    for node in nodes:    
+    
+    def do(node):    
         capacity_commit_id = node['os_version'].split(' ')[1]
         addr=node["robot_address"][7:-5]  
 
@@ -27,7 +29,7 @@ def main(farm_name, commit_id):
             node_client=j.clients.zos.get("main", data={"host":addr})
             real_node_commit_id = node_client.client.info.version()['revision']
         except:
-            logger.error(" {} Can't get node client ... ".format(addr))
+            logger.error("{} Can't get node client ... ".format(addr))
             continue
 
         if capacity_commit_id != real_node_commit_id:
@@ -39,8 +41,17 @@ def main(farm_name, commit_id):
             if capacity_commit_id != commit_id:
                 logger.error('{} != {}, node: {}:{}, issue in capacity logs'.format(capacity_commit_id, commit_id, node['node_id'], addr))
             if real_node_commit_id != commit_id:
-                 logger.error('{} != {}, node: {}:{}, issue in real node logs'.format(real_node_commit_id, commit_id, node['node_id'], addr))
+                logger.error('{} != {}, node: {}:{}, issue in real node logs'.format(real_node_commit_id, commit_id, node['node_id'], addr))
+    execute_all_nodes(do, nodes=nodes)
 
+
+def execute_all_nodes(func, nodes):
+    """
+    execute func on all the nodes
+    """
+    g = Pool(size=100)
+    g.map(func, nodes)
+    g.join()
 
 if __name__ == '__main__':
     main()
