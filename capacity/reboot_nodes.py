@@ -19,10 +19,10 @@ def main(farm_name):
         except:        
             logger.error("can't reach %s skipping", node.addr)
         try:
-            node.containers.get('zrobot').stop()
-            logger.info('stop zrobot for {} node'.format(node.addr))
+            node.reboot()
+            logger.info('reboot {} node'.format(node.addr))
         except:
-            logger.error("can't find zrorbot in {} node".format(node.addr))
+            logger.error("can't reboot {} node".format(node.addr))
 
     execute_all_nodes(do, nodes=nodes)            
 
