@@ -6,10 +6,12 @@ from gevent.pool import Pool
 @click.command()
 @click.option("-f", "--farm_name", help="farm name to update its zrobot", required=True)
 def main(farm_name):
+    logger = j.logger.get('log.txt')
     capacity = j.clients.threefold_directory.get(interactive=False)
     resp = capacity.api.ListCapacity(query_params={'farmer': farm_name})[1]
     nodes = resp.json() #nodes
-    
+    logger.info("no. of nodes : {}".format(len(nodes)))
+
     def do(node):                                             
         addr=node["robot_address"][7:-5]                                
         node=j.clients.zos.get("main", data={"host":addr})
