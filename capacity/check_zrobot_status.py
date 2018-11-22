@@ -27,6 +27,7 @@ def main(farm_name):
                 logger.warning('not running : zrobot for {} node'.format(node.addr))
         except Exception as e:
             logger.error("can't find zrorbot in {} node".format(node.addr))
+            logger.error(e)
 
     execute_all_nodes(do, nodes=nodes)
 

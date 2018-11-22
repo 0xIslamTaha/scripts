@@ -21,8 +21,9 @@ def main(farm_name):
         try:
             node.containers.get('zrobot').stop()
             logger.info('stop zrobot for {} node'.format(node.addr))
-        except:
+        except Exception as e:
             logger.error("can't find zrorbot in {} node".format(node.addr))
+            logger.error(e)
 
     execute_all_nodes(do, nodes=nodes)            
 

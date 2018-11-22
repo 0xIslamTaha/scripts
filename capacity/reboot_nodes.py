@@ -21,8 +21,9 @@ def main(farm_name):
         try:
             node.reboot()
             logger.info('reboot {} node'.format(node.addr))
-        except:
+        except Exception as e:
             logger.error("can't reboot {} node".format(node.addr))
+            logger.error(e)
 
     execute_all_nodes(do, nodes=nodes)            
 
