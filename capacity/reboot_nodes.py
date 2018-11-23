@@ -18,6 +18,7 @@ def main(farm_name):
             node.client.ping()                         
         except:        
             logger.error("can't reach %s skipping", node.addr)
+            return
         try:
             node.reboot()
             logger.info('reboot {} node'.format(node.addr))
