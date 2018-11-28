@@ -18,6 +18,7 @@ def main(farm_name):
             node.client.ping()                         
         except:        
             logger.error("can't reach %s skipping", node.addr)
+            return
         try:
             node.containers.get('zrobot').stop()
             logger.info('stop zrobot for {} node'.format(node.addr))

@@ -29,6 +29,7 @@ def main(farm_name, commit_id):
             real_node_commit_id = node_client.client.info.version()['revision']
         except:
             logger.error("{} Can't get node client ... ".format(addr))
+            return
 
         if capacity_commit_id != real_node_commit_id:
             logger.error('{} != {}, node: {}:{}'.format(capacity_commit_id, real_node_commit_id, node['node_id'], addr))

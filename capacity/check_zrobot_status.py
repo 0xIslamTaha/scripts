@@ -20,6 +20,7 @@ def main(farm_name):
             node.client.ping()
         except:        
             logger.error("can't reach %s node", node.addr)
+            return
         try:
             if node.containers.get('zrobot').is_running():
                 logger.info('running : zrobot for {} node'.format(node.addr))
