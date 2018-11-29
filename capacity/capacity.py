@@ -5,9 +5,10 @@ from IPython import embed
 from jumpscale import j
 from subprocess import Popen, PIPE
 from gevent.pool import Group
+import click
 
 
-class capacity:
+class Capacity:
     def __init__(self, farm_name):
         self.farm_name = farm_name
         self.capacity = j.clients.threefold_directory.get(interactive=False)
@@ -120,6 +121,11 @@ class capacity:
         g.map(func, nodes)
         g.join()
 
-if __name__ == '__main__':
+@click.command()
+@click.option("-f", "--farm_name", help="farm name to update its zrobot", required=True)
+def main(farm_name):
+    capacity = Capacity(farm_name)
     embed()
 
+if __name__ == '__main__':
+    main()
