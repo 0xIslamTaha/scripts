@@ -70,14 +70,14 @@ class Capacity:
 
         self.execute_all_nodes(do, nodes=self.nodes)
 
-    def get_node_ip_from_id(self, node_id):
+    def get_node_ip_from_node_id(self, node_id):
         for node in self.nodes:
             if node['node_id'] == node_id:
                 addr = node["robot_address"][7:-5]
                 self.logger.info('{} : {}'.format(node_id, addr))
                 return addr
 
-    def reboot_node(self):
+    def reboot_nodes(self):
         def do(node):
             addr = node["robot_address"][7:-5]
             node = j.clients.zos.get("main", data={"host": addr})
@@ -95,7 +95,7 @@ class Capacity:
 
         self.execute_all_nodes(do, nodes=self.nodes)
         
-    def updata_zrobot(self):
+    def update_zrobots(self):
         def do(node):
             addr = node["robot_address"][7:-5]
             node = j.clients.zos.get("main", data={"host": addr})
