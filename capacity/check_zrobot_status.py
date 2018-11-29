@@ -1,3 +1,6 @@
+from gevent import monkey
+monkey.patch_all()
+
 from jumpscale import j
 import click
 from gevent.pool import Pool

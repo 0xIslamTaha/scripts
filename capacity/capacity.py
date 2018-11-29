@@ -1,3 +1,6 @@
+from gevent import monkey
+monkey.patch_all()
+
 from IPython import embed
 from jumpscale import j
 from subprocess import Popen, PIPE
@@ -73,7 +76,7 @@ class capacity:
                 self.logger.info('{} : {}'.format(node_id, addr))
                 return addr
 
-    def reboo_node(self):
+    def reboot_node(self):
         def do(node):
             addr = node["robot_address"][7:-5]
             node = j.clients.zos.get("main", data={"host": addr})

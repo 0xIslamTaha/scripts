@@ -1,3 +1,6 @@
+from gevent import monkey
+monkey.patch_all()
+
 from jumpscale import j
 from subprocess import Popen, PIPE
 import click
