@@ -9,7 +9,7 @@ import click
 
 
 class Capacity:
-    def __init__(self, farm_name, execlude_nodes=[]):
+    def __init__(self, farm_name, execlude_nodes=()):
         self.farm_name = farm_name
         self.capacity = j.clients.threefold_directory.get(interactive=False)
         self.resp = self.capacity.api.ListCapacity(query_params={'farmer': self.farm_name})[1]
@@ -136,7 +136,7 @@ class Capacity:
 
 @click.command()
 @click.option("-f", "--farm_name", help="farm name to update its zrobot", required=True)
-@click.option("-e", "--exclude_nodes", help="exclude nodes from the scripts", required=True)
+@click.option("-e", "--exclude_nodes", help="exclude nodes from the scripts", required=True, multiple=True)
 def main(farm_name, exclude_nodes):
     capacity = Capacity(farm_name, exclude_nodes)
     embed()
