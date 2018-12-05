@@ -9,11 +9,12 @@ import click
 
 
 class Capacity:
-    def __init__(self, farm_name):
+    def __init__(self, farm_name, execlude_nodes=[]):
         self.farm_name = farm_name
         self.capacity = j.clients.threefold_directory.get(interactive=False)
         self.resp = self.capacity.api.ListCapacity(query_params={'farmer': self.farm_name})[1]
         self.nodes = self.resp.json()  # nodes
+        self.exclude_nodes = execlude_nodes
         self.logger = j.logger.get('check_node_commit')
         self.logger.info(" #Nodes : {}".format(len(self.nodes)))
         
@@ -21,6 +22,9 @@ class Capacity:
         def do(node):
             capacity_commit_id = node['os_version'].split(' ')[1]
             addr = node["robot_address"][7:-5]
+            if addr in self.exclude_nodes:
+                self.logger.info('exclude node : {}'.format(addr))
+                return
 
             # check node is up
             res = Popen("ping -c 1 {}".format(addr), shell=True, stdout=PIPE, stderr=PIPE)
@@ -52,6 +56,9 @@ class Capacity:
     def check_zrobot_status(self):
         def do(node):
             addr = node["robot_address"][7:-5]
+            if addr in self.exclude_nodes:
+                self.logger.info('exclude node : {}'.format(addr))
+                return            
             node = j.clients.zos.get("main", data={"host": addr})
             try:
                 node.client.ping()
@@ -80,6 +87,9 @@ class Capacity:
     def reboot_nodes(self):
         def do(node):
             addr = node["robot_address"][7:-5]
+            if addr in self.exclude_nodes:
+                self.logger.info('exclude node : {}'.format(addr))
+                return            
             node = j.clients.zos.get("main", data={"host": addr})
             try:
                 node.client.ping()
@@ -98,6 +108,9 @@ class Capacity:
     def update_zrobots(self):
         def do(node):
             addr = node["robot_address"][7:-5]
+            if addr in self.exclude_nodes:
+                self.logger.info('exclude node : {}'.format(addr))
+                return            
             node = j.clients.zos.get("main", data={"host": addr})
             try:
                 node.client.ping()
