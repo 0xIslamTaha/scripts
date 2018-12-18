@@ -136,7 +136,7 @@ class Capacity:
 
 @click.command()
 @click.option("-f", "--farm_name", help="farm name to update its zrobot", required=True)
-@click.option("-e", "--exclude_nodes", help="exclude nodes from the scripts", required=True, multiple=True)
+@click.option("-e", "--exclude_nodes", help="exclude nodes from the scripts", multiple=True)
 def main(farm_name, exclude_nodes):
     capacity = Capacity(farm_name, exclude_nodes)
     embed()
